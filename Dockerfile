@@ -15,9 +15,9 @@ COPY app.py /app/app.py
 COPY templates /app/templates
 
 WORKDIR /app
-
-RUN /usr/bin/python3 -m pip install -r requirements.txt
+RUN /usr/bin/python3 -m venv /venv
+RUN /venv/bin/python3 -m pip install -r requirements.txt
 
 EXPOSE 5000
 
-CMD gunicorn -w 4 -b 0.0.0.0:5000 app:app
+CMD /venv/bin/gunicorn -w 4 -b 0.0.0.0:5000 app:app
