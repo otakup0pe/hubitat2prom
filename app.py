@@ -15,7 +15,7 @@ app = Flask(__name__)
 try:
     base_uri = os.environ["HE_URI"]
     access_token = os.environ["HE_TOKEN"]
-    collected_metrics = os.getenv("HE_METRICS", "battery,humidity,illuminance,level,switch,temperature,power,energy").split(",")
+    collected_metrics = os.getenv("HE_METRICS", "battery,humidity,illuminance,level,switch,temperature,power,energy,date,motion,contact").split(",")
 except KeyError as e:
     print(f"Could not read the environment variable - {e}")
 
@@ -82,6 +82,19 @@ def metrics():
                                 value = 1
                             elif value == "off":
                                 value = 0
+
+                        if attrib in ['acceleration', 'motion']:
+                            if value == "active":
+                                value = 1
+                            else:
+                                value = 0
+
+                        if attrib == "contact":
+                            if value == "open":
+                                value = 1
+                            else:
+                                value = 0
+
 
                         metric_name = sanitize(attrib)
 
